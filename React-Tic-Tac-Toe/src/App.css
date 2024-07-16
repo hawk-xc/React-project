@@ -5,6 +5,25 @@
   text-align: center;
 }
 
+.game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.moves {
+  padding-inline: 6px;
+  padding-block: 3px;
+  border: 1px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.moves:hover {
+  background-color: black;
+}
+
 .container {
   display: flex;
   flex-direction: column;
