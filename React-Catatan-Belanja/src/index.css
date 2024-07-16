@@ -78,7 +78,8 @@ button {
 .list {
   background-image: url(img/paper-bg.jpg);
   background-repeat: repeat-y;
-  background-size: 155%;
+  background-size: 100%;
+  width: 100%;
   /* background-attachment: local; */
   color: #fefae0;
   padding: 2.3rem 0 0;
@@ -150,6 +151,10 @@ button {
   padding: 3.2rem 0;
   font-size: 2rem;
   font-weight: bold;
+}
+
+.checked {
+  text-decoration: line-through;
 }
 
 /* tablet */
