@@ -1,35 +1,140 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const initalGroceryItems = [
+  {
+    id: 1,
+    name: 'Kopi',
+    quantity: 2,
+    checked: false
+  },
+  {
+    id: 2,
+    name: 'Gula Pasir',
+    quantity: 2,
+    checked: false
+  },
+  {
+    id: 3,
+    name: 'Air Mineral',
+    quantity: 1,
+    checked: false
+  },
+  {
+    id: 4,
+    name: 'Telur',
+    quantity: 1,
+    checked: false}
+];
 
+export default function App() {
+  const [groceryItems, setGroceryItems] = useState(initalGroceryItems);
+
+  const addItem = (name, quantity) => {
+    setGroceryItems((prevItem) => [
+      ...prevItem, {
+        id: prevItem.length + 1,
+        name: name,
+        quantity: quantity === 0 ? quantity + 1 : quantity,
+        checked: false
+      }
+    ]);
+  }
+
+  return(
+    <div className="app">
+      <Header />
+      <Form addItem={addItem} />
+      <GroceryList groceryItems={groceryItems} setGroceryItems={setGroceryItems} />
+      <Action />
+      <Footer />
+    </div>
+  );
+};
+
+function Header() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <h1>Catatan Belanjaku 📝</h1>
+  );
 }
 
-export default App
+function Form({addItem}) {
+  const [name, setName] = useState('');
+  const [quantity, setQuantity] = useState(0);
+
+  const counts = Array.from({ length: 10 }, (_, index) => index + 1);
+
+  const handleAddData = (e) => {
+    e.preventDefault();
+    addItem(name, quantity);
+    setName('');
+    setQuantity(0); 
+  }
+
+  return( 
+    <>
+      <form className="add-form" onSubmit={handleAddData}> 
+        <h3>Hari ini belanja apa kita?</h3>
+        <div>
+          <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
+            {counts.map((item) => (
+              <option key={item}>{item}</option>
+            ))}
+          </select>
+          <input type="text" placeholder="nama barang..." value={name} onChange={(e) => setName(e.target.value)} />
+        </div>
+        <button type="submit">Tambah</button>
+      </form>
+    </>
+  );
+}
+
+function GroceryList({groceryItems, setGroceryItems}) {
+  const handleChecked = (id) => {
+    setGroceryItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id ? { ...item, checked: !item.checked } : item
+      )
+    );
+  };
+
+  const handleRemove = (id) => {
+    setGroceryItems(prevItems => prevItems.filter(item => item.id !== id));
+  }
+
+  return(
+    <>
+      <div className="list">
+        <ul>
+          {groceryItems.map((i) => (
+            <li key={i.id} >
+              <input type="checkbox" checked={i.checked} onChange={() => handleChecked(i.id)} />
+              <span className={i.checked ? 'checked' : ''}>{i.quantity} {i.name}</span>
+              <button onClick={() => handleRemove(i.id) }>&times;</button>
+            </li>
+          ))}          
+        </ul>
+      </div>
+    </>
+  );
+}
+
+function Action() {
+  return (
+    <>
+      <div className="actions">
+        <select>
+          <option value="input">Urutkan berdasarkan urutan input</option>
+          <option value="name">Urutkan berdasarkan nama barang</option>
+          <option value="checked">Urutkan berdasarkan ceklis</option>
+        </select>
+        <button>Bersihkan Daftar</button>
+      </div>
+    </>
+  );
+}
+
+function Footer() {
+  return(
+    <footer className="stats">Ada {initalGroceryItems.length} barang di daftar belanjaan, 5 barang sudah dibeli (50%)</footer>
+  );
+}
