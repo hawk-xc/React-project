@@ -45,8 +45,8 @@ export default function App() {
       <Header />
       <Form addItem={addItem} />
       <GroceryList groceryItems={groceryItems} setGroceryItems={setGroceryItems} />
-      <Action />
-      <Footer />
+      <Action groceryItems={groceryItems} setGroceryItems={setGroceryItems} />
+      <Footer groceryItems={groceryItems} />
     </div>
   );
 };
@@ -65,6 +65,7 @@ function Form({addItem}) {
 
   const handleAddData = (e) => {
     e.preventDefault();
+    if(name === '') return;
     addItem(name, quantity);
     setName('');
     setQuantity(0); 
@@ -80,7 +81,7 @@ function Form({addItem}) {
               <option key={item}>{item}</option>
             ))}
           </select>
-          <input type="text" placeholder="nama barang..." value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" placeholder="nama barang..." value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <button type="submit">Tambah</button>
       </form>
@@ -98,7 +99,8 @@ function GroceryList({groceryItems, setGroceryItems}) {
   };
 
   const handleRemove = (id) => {
-    setGroceryItems(prevItems => prevItems.filter(item => item.id !== id));
+    const confirmation = confirm('apakah anda yakin ingin menghapus?');
+    if(confirmation) setGroceryItems(prevItems => prevItems.filter(item => item.id !== id));
   }
 
   return(
@@ -118,7 +120,12 @@ function GroceryList({groceryItems, setGroceryItems}) {
   );
 }
 
-function Action() {
+function Action({groceryItems, setGroceryItems}) {
+  function clearList() {
+    const confirmation = confirm('apakah anda yakin ingin menghapus semua?');
+    if(confirmation) setGroceryItems([]);
+  }
+
   return (
     <>
       <div className="actions">
@@ -127,14 +134,14 @@ function Action() {
           <option value="name">Urutkan berdasarkan nama barang</option>
           <option value="checked">Urutkan berdasarkan ceklis</option>
         </select>
-        <button>Bersihkan Daftar</button>
+        <button onClick={clearList} disabled={groceryItems.length === 0}>Bersihkan Daftar</button>
       </div>
     </>
   );
 }
 
-function Footer() {
+function Footer({groceryItems}) {
   return(
-    <footer className="stats">Ada {initalGroceryItems.length} barang di daftar belanjaan, 5 barang sudah dibeli (50%)</footer>
+    <footer className="stats">Ada {groceryItems.length} barang di daftar belanjaan, 5 barang sudah dibeli (50%)</footer>
   );
 }
