@@ -32,7 +32,7 @@ export default function App() {
   const addItem = (name, quantity) => {
     setGroceryItems((prevItem) => [
       ...prevItem, {
-        id: prevItem.length + 1,
+        id: groceryItems[groceryItems.length - 1].id + 1,
         name: name,
         quantity: quantity === 0 ? quantity + 1 : quantity,
         checked: false
@@ -142,6 +142,6 @@ function Action({groceryItems, setGroceryItems}) {
 
 function Footer({groceryItems}) {
   return(
-    <footer className="stats">Ada {groceryItems.length} barang di daftar belanjaan, 5 barang sudah dibeli (50%)</footer>
+    <footer className="stats">Ada {groceryItems.length} barang di daftar belanjaan, {groceryItems.filter(item => item.checked === true).length} barang sudah dibeli ({groceryItems.filter(item => item.checked === true).length / groceryItems.length * 100}%)</footer>
   );
 }
