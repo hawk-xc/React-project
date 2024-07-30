@@ -1,10 +1,34 @@
+import { useState, memo } from 'react';
+
+const SearchLists = memo(() => {
+    const movies = ['movies1', 'movies2', 'movies3', 'movies4', 'movies5'];
+    return (
+        <div className="container absolute" id="searchList">
+            <ul>
+                {movies.map((item, index) => (
+                    <li key={index}>{item}</li>
+                ))}
+            </ul>
+        </div>
+    );
+});
+
 export default function Navbar({ setTheme }) {
-    const theme = ['light', 'dark', 'dim', 'cupcake'];
+    const theme = ['light', 'dark', 'dim', 'cupcake', 'retro', 'cyberpunk'];
+
+    const movies = ['movies1', 'movies2', 'movies3', 'movies4', 'movies5'];
+    const [search, setSearch] = useState('');
+    const [isSearch, setIsSearch] = useState(false);
+
+    function handleSearch(e) {
+        setIsSearch(true);
+        setSearch(e.target.value);
+    }
 
     return (
-        <div id="navbar" className="container w-full h-16 px-5 m-5  flex justify-between items-center flex-row">
+        <div id="navbar" className="container w-full h-16 md:px-5 md:m-5  flex justify-between items-center flex-row">
             <span className="text-2xl font-extrabold">
-            ⚛️ React Movis
+            <i className="ri-reactjs-fill font-normal"></i> React Movis <span className="text-xs font-light">v 0.0.1</span>
             </span>
             <span>
                 <div className="flex flex-row gap-3">
@@ -18,7 +42,7 @@ export default function Navbar({ setTheme }) {
 
                     <span>
                         <label className="input input-bordered flex items-center gap-2">
-                            <input type="text" className="grow" placeholder="Cari..." />
+                            <input type="text" className="grow" placeholder="Search by movie name..." onChange={(e) => handleSearch(e)}/>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 16 16"
@@ -30,6 +54,7 @@ export default function Navbar({ setTheme }) {
                                 clipRule="evenodd" />
                             </svg>
                         </label>
+                        {search && <SearchLists />}
                     </span>
                 </div>
             </span>
