@@ -4,6 +4,7 @@ export default function Pagination({page, setPage}) {
             setPage(page - 1);
         } else if (e.currentTarget.id === 'next') {
             setPage(page + 1);
+            // pagination
         }
     }
 
