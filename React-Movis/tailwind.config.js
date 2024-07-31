@@ -15,7 +15,9 @@ export default {
       'light', 
       'dark', 
       'cupcake',
-      'dim'
+      'dim',
+      'retro',
+      'cyberpunk',
     ],
   },
 }
